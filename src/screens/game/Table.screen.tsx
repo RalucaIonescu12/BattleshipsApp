@@ -12,12 +12,12 @@ const TabelScreen = () => {
     const gameCtx = useGameContext();
     const auth = useAuth();
     useEffect(() => {
-        gameCtx.loadGame(route.params.gameId)
+        // gameCtx.loadGame(route.params.gameId)
     }, [])
     return (
         <SafeAreaView>
             <Text>Game</Text>
-            <Table state={gameCtx.tableState} onClick={(cell) => sendMove(auth.token, route.params.gameId, cell)}/>
+            {/* <Table state={gameCtx.tableState} onClick={(cell) => sendMove(auth.token, route.params.gameId, cell)}/> */}
         </SafeAreaView>
     )
 }

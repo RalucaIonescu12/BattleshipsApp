@@ -3,6 +3,7 @@ import LoginScreen from '../screens/auth/Login.screen';
 import RegisterScreen from '../screens/auth/Register.screen';
 import { AuthRouteNames } from './route-names';
 import { Text } from 'react-native';
+import UserDetailsScreen from '../screens/UserDetails.screen';
 
 const AuthStack = createNativeStackNavigator()
 
@@ -13,6 +14,9 @@ const authRoutes = (
         }}/>
         <AuthStack.Screen name={AuthRouteNames.REGISTER} component={RegisterScreen} options={{
             headerTitle: (props) => <Text {...props}>Register</Text>
+        }}/>
+        <AuthStack.Screen name={AuthRouteNames.DETAILS} component={UserDetailsScreen} options={{
+            headerTitle: (props) => <Text {...props}>My details</Text>
         }}/>
     </AuthStack.Navigator>
 )

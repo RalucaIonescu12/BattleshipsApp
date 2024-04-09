@@ -9,7 +9,18 @@ const LoginScreen = () => {
         navigation.navigate(AuthRouteNames.REGISTER)
     }
     const auth = useAuth()
-    return <Login onSubmit={auth.login} goToRegister={handleGoToRegister}/> 
+    const handleLogin = async (email: string, password: string) => {
+        try {
+            await auth.login(email, password);
+            
+            navigation.navigate(AuthRouteNames.DETAILS);
+        } catch (error) {
+            console.error('Login error:', error);
+        }
+    };
+
+
+    return <Login onSubmit={handleLogin} goToRegister={handleGoToRegister}/> 
 }
 
 export default LoginScreen

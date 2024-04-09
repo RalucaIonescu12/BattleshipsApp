@@ -1,6 +1,7 @@
 export const enum AuthRouteNames {
     LOGIN = 'LOGIN',
-    REGISTER = 'REGISTER'
+    REGISTER = 'REGISTER',
+    DETAILS = 'USERDETAILS'
 }
 
 export const enum GameRouteNames {

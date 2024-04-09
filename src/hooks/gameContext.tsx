@@ -2,8 +2,12 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import {loadGame} from '../api';
 import { useAuth } from './authContext';
 
-export type CellId = 'A1' | 'A2' | 'A3' | 'B1' | 'B2' | 'B3' | 'C1' | 'C2' | 'C3';
+export type XCoordinate = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J';
+export type YCoordinate = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+
+export type CellId = `${XCoordinate}${YCoordinate}`;
 export type CellValue = 'x' | '0' | '';
+
 
 export interface ICell {
     value: CellValue;
@@ -24,19 +28,19 @@ interface Move {
     userId: number;
     cell: CellId;
     gameId: number
-
+    result:boolean
 }
 
 enum GameStatus {
-    OPEN = "open",
+    CREATED = "created",
+    MAP_CONFIG = "map_config",
     ACTIVE = "active",
-    DRAW = "ended_draw",
-    WIN = "ended_win"
+    FINISHED = "FINISHED"
 }
 
 interface Game {
     createdAt: string;
-    id: number;
+    id: number;              //?
     users: User[];
     winnerId: number;
     moves: Move[];
@@ -56,11 +60,20 @@ const Context = createContext<GameContext>({
     tableState: []
 });
 
-const baseTableState: ICell[][] = [
-    [{id: 'A1', value: ''}, {id: 'A2', value: ''}, {id: 'A3', value: ''}],
-    [{id: 'B1', value: ''}, {id: 'B2', value: ''}, {id: 'B3', value: ''}],
-    [{id: 'C1', value: ''}, {id: 'C2', value: ''}, {id: 'C3', value: ''}]
-]
+const baseTableState: ICell[][] = [];
+
+const rows: YCoordinate[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const cols: XCoordinate[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
+for (const row of rows) {
+    const newRow: ICell[] = [];
+    for (const col of cols) {
+      const id: CellId = `${col}${row}`;
+      const cell: ICell = { id, value: '' };
+      newRow.push(cell);
+    }
+    baseTableState.push(newRow);
+}
 
 export const GameContext: React.FC<{children: React.ReactNode}> = ({children}) => {
     const [game, setGame] = useState<Game | null>(null);
@@ -88,6 +101,7 @@ export const GameContext: React.FC<{children: React.ReactNode}> = ({children}) =
     const handleLoadGame = async (id: number) => {
         const result = await loadGame(auth.token, id);
         setGame(result);
+        console.log("loadGame")
     }
 
     useEffect(() => {
