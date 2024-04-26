@@ -55,6 +55,7 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({chil
             await AsyncStorage.setItem('email', email);
             setEmail(email);
             await AsyncStorage.setItem('token', result);
+            console.log(result)
         } catch (error) {
             console.log(error)
         }

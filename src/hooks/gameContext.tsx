@@ -101,7 +101,6 @@ export const GameContext: React.FC<{children: React.ReactNode}> = ({children}) =
     const handleLoadGame = async (id: number) => {
         const result = await loadGame(auth.token, id);
         setGame(result);
-        console.log("loadGame")
     }
 
     useEffect(() => {

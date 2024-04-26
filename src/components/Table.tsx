@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Text } from "react-native";
-import { CellId, ICell } from "../hooks/gameContext";
+ import { CellId, ICell } from "../hooks/gameContext";
 
 
 interface ITable {
@@ -10,8 +10,8 @@ interface ITable {
 }
 
 const Cell = styled.TouchableOpacity`
-    width: 80px;
-    height: 80px;
+    width: 30px;
+    height: 30px;
     border: 1px solid;
     margin: 1px;
     display: flex;
@@ -22,11 +22,13 @@ const Cell = styled.TouchableOpacity`
 const Row = styled.View`
     disiplay: flex;
     flex-direction: row;
+    margin-left:50px;
 `
 
 const Table: React.FC<ITable> = ({state, onClick}) => {
     return (
         state.map((line, index) => (
+            <div style={{marginTop:20}}>
             <Row key={index}>
                 {line.map(({id, value}) => (
                     <Cell key={id} onPress={() => onClick(id)}>
@@ -34,6 +36,7 @@ const Table: React.FC<ITable> = ({state, onClick}) => {
                     </Cell>
                 ))}
             </Row>
+            </div>
         ))
     )
 }

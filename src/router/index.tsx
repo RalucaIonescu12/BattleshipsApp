@@ -24,7 +24,9 @@ const Router: React.FC  = () => {
 
     return (
         <NavigationContainer>
-            {auth.token ? gameRoutes : authRoutes}
+            {
+            auth.token ? gameRoutes :
+            authRoutes}
           
         </NavigationContainer>
     )

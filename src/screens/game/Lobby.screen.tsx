@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
 const GameList = styled.ScrollView``
 
 const LobbyScreen = () => {
+    const navigation = useNavigation<any>()
     const auth = useAuth();
     const [games, setGames] = useState<any[]>([]);
     const [filterApplied, setFilterApplied] = useState(false);
@@ -37,6 +38,7 @@ const LobbyScreen = () => {
         try {
             const userEmailFromStorage = await AsyncStorage.getItem('email');
             setUserEmail(userEmailFromStorage || '');
+            console.log("Email in async storage: "+userEmail)
         } catch (error) {
             console.error('Error fetching user email:', error);
         }
@@ -53,17 +55,15 @@ const LobbyScreen = () => {
         console.error('Error fetching games:', error);
         }
     };
-    const navigation = useNavigation<any>();
     const applyFilter = () => {
-        
         setFilterApplied(true);
-        console.log("Filter Applied"+filterApplied+ " " + userEmail);
+        loadUserEmail();
         loadGames(); 
       };
     
       const clearFilter = () => {
         setFilterApplied(false);
-        console.log("Filter Applied"+filterApplied+ " " + userEmail);
+        loadUserEmail();
         loadGames(); 
       };
 
@@ -102,20 +102,24 @@ const LobbyScreen = () => {
       <GameList style={{marginTop:20}}>
   {filterApplied
     ? games
-        .filter((game) => game.player1 && game.player1.email === auth.email)
+        .filter((game) => (game.player1 && game.player1.email === auth.email) || (game.player2 && game.player2.email === auth.email) )
         .map((game) => (
           <GameListItem
             status={game.status}
             player1Email={game.player1?.email}
-            player2Email={game.player2 ? game.player2.email : userEmail}
+            player2Email={game.player2 ? game.player2.email : "string"}
             id={game.id}
             key={game.id}
             onPress={() => {
-              navigation.navigate(GameRouteNames.TABLE, { gameId: game.id });
+              navigation.navigate(GameRouteNames.TABLE,  { gameId: game.id, 
+              player1Email: game.player1 ? game.player1.email : "string", 
+              player2Email: game.player2 ? game.player2.email : "string" });
             }}
           />
         ))
-    : games.map((game) => (
+    : games
+    .filter((game) => !game.player1 || !game.player2)
+    .map((game) => (
         <GameListItem
           status={game.status}
           player1Email={game.player1?.email}
@@ -123,7 +127,9 @@ const LobbyScreen = () => {
           id={game.id}
           key={game.id}
           onPress={() => {
-            navigation.navigate(GameRouteNames.TABLE, { gameId: game.id });
+            navigation.navigate(GameRouteNames.TABLE, { gameId: game.id, 
+            player1Email: game.player1 ? game.player1.email : "string", 
+            player2Email: game.player2 ? game.player2.email : "string" });
           }}
         />
       ))}

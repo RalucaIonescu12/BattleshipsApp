@@ -2,7 +2,8 @@ import { CellId, XCoordinate, YCoordinate } from "./hooks/gameContext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // const baseUrl = process.env.EXPO_PUBLIC_API_URL;
-const baseUrl="https://malamute-enabled-yak.ngrok-free.app"
+// const baseUrl="https://malamute-enabled-yak.ngrok-free.app"
+const baseUrl="http://163.172.177.98:8081"
 console.log(baseUrl)
 const baseHeaders = {
     "Content-Type": 'application/json',
@@ -20,7 +21,7 @@ export const login = async (email: string, password: string): Promise<string> =>
         })
     })
     const data = await result.json()
-    console.log("access token: " + data.accessToken)
+    console.log("access token: " + data.accessToken+" parola :" +password)
 
     return data.accessToken
 };
@@ -41,7 +42,7 @@ export const register = async (email: string, password: string) => {
 };
 
 export const fetchUserDetails = async (): Promise<any> => {
-    // Get token from AsyncStorage
+   
     const token = await AsyncStorage.getItem('token');
     
     if (!token) {
@@ -64,7 +65,7 @@ export const fetchUserDetails = async (): Promise<any> => {
         throw new Error('Failed to fetch user details');
       }
     } catch (error:any) {
-      throw new Error('Error fetching user details: ' + error.message);
+      throw new Error('Error fetching user details: ' + error.message + token);
     }
   };
 export const listGames = async (token: string) => {
@@ -93,7 +94,19 @@ export const createGame = async (token: string) => {
     console.log("CREATED THE GAME: "+ data.id+ " "+ data.status)
     return data
 }
-
+export const joinGame = async (token: string, gameId:string) => {
+    const result = await fetch(`${baseUrl}/game/join/${gameId}`, {
+        method: 'POST',
+        headers: {
+            ...baseHeaders,
+            'Authorization': `Bearer ${token}`
+        }
+    })
+   
+    const data = await result.json();
+    console.log("joined the game: " + data)
+    return data
+}
 export const loadGame = async (token: string, gameId: number) => {
     const result = await fetch(`${baseUrl}/game/${gameId}`, {
         method: 'get',

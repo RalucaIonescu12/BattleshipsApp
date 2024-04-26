@@ -6,13 +6,13 @@ import { useAuth } from "../../hooks/authContext"
 const LoginScreen = () => {
     const navigation = useNavigation<any>()
     const handleGoToRegister = () => {
+        // console.log('Navigating to REGISTER screen with params:', AuthRouteNames.REGISTER);
         navigation.navigate(AuthRouteNames.REGISTER)
     }
     const auth = useAuth()
     const handleLogin = async (email: string, password: string) => {
         try {
             await auth.login(email, password);
-            
             navigation.navigate(AuthRouteNames.DETAILS);
         } catch (error) {
             console.error('Login error:', error);
