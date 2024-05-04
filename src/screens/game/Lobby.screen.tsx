@@ -57,13 +57,11 @@ const LobbyScreen = () => {
     };
     const applyFilter = () => {
         setFilterApplied(true);
-        loadUserEmail();
         loadGames(); 
       };
     
       const clearFilter = () => {
         setFilterApplied(false);
-        loadUserEmail();
         loadGames(); 
       };
 
